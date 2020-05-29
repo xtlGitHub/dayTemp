@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.suse.edu.baby.mapper.member.MemberMapper">
+
+    <select id="list1"
+            resultType="cn.suse.edu.baby.pojo.member.Member"
+            parameterType="cn.suse.edu.baby.pojo.member.Member"
+            >
+		select * from member
+
+          where member_name like
+          concat('%',#{_parameter},'%')
+          and username = #{username}
+
+	</select>
+
+    <select id="list"
+            resultType="cn.suse.edu.baby.pojo.member.Member"
+            parameterType="String"
+    >
+        select * from member where username = #{username}
+
+    </select>
+
+    <update id="update" parameterType="cn.suse.edu.baby.pojo.member.Member"
+
+    >
+		update member m
+        set
+          m.member_name = #{memberName}
+        ,
+          m.member_tel = #{memberTel}
+        ,
+          m.member_money=#{memberMoney}
+        ,
+          m.member_discount=#{memberDiscount}
+        where
+          m.id=#{id}
+
+	</update>
+
+    <insert id="insert" parameterType="cn.suse.edu.baby.pojo.member.Member">
+
+        insert into member(member_name,member_tel,member_money,member_discount,username)
+        values( #{memberName},#{memberTel},#{memberMoney},#{memberDiscount},#{username})
+
+
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        delete  from member where id = #{id}
+
+    </delete>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.suse.edu.baby.mapper.record.RecordMapper">
+
+    <select id="list1"
+            resultType="cn.suse.edu.baby.pojo.record.RecordPro"
+            parameterType="cn.suse.edu.baby.pojo.record.RecordPro"
+            >
+		select record.*,product.pro_name from record
+		left join product on record.pro_id = product.id
+        where product.pro_name like
+        concat('%',#{_parameter},'%')
+        and username = #{username}
+
+	</select>
+
+    <select id="list"
+            resultType="cn.suse.edu.baby.pojo.record.RecordPro"
+            parameterType="String"
+    >
+       select record.*,product.pro_name
+       from record left join product on record.pro_id = product.id
+       where record.username = #{username} and product.username=#{username}
+
+    </select>
+
+    <update id="update" parameterType="cn.suse.edu.baby.pojo.record.Record"
+
+    >
+		update record m
+        set
+          m.pro_type = #{proType}
+        ,
+          m.pro_money = #{proMoney}
+        ,
+          m.pro_num=#{proNum}
+        ,
+          m.pro_date=#{proDate}
+        where
+          m.id=#{id}
+	</update>
+
+    <insert id="insert" parameterType="cn.suse.edu.baby.pojo.record.Record">
+        insert into record(pro_type,pro_num,pro_date,pro_money,pro_id,username)
+        values( #{proType},#{proNum},#{proDate},#{proMoney},#{proId},#{username})
+
+
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        delete  from record where id = #{id}
+
+    </delete>
+
+    <select id="listOutCount" resultType="cn.suse.edu.baby.pojo.record.RecordPro" parameterType="String">
+
+        select sum(r.pro_num) as pro_num ,p.pro_name
+      from record r
+      left join product p
+      on p.id = r.pro_id
+
+      where r.pro_type=0
+      and r.username = #{username} and p.username = #{username}
+      GROUP BY r.pro_id
+
+    </select>
+
+
+    <select id="listInCount" resultType="cn.suse.edu.baby.pojo.record.RecordPro" parameterType="String">
+
+        select sum(r.pro_num) as pro_num,p.pro_name
+      from record r
+      left join product p
+      on p.id = r.pro_id
+
+      where r.pro_type=1
+       and r.username = #{username} and p.username = #{username}
+      GROUP BY r.pro_id
+
+    </select>
+
+</mapper>
